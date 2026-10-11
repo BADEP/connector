@@ -1,6 +1,7 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
+from typing import ClassVar
 from unittest import mock
 
 from odoo.tests.common import BaseCase, tagged
@@ -226,7 +227,7 @@ class TestEvent(ComponentRegistryCase):
         collected = self.collecter.collect_events("on_record_create")
         # CollectedEvents.events contains the collected events
         self.assertEqual(1, len(collected.events))
-        event = list(collected.events)[0]
+        event = next(iter(collected.events))
         self.assertEqual(self.work, event.__self__.work)
         self.assertEqual(self.work.env, event.__self__.work.env)
 
@@ -250,7 +251,7 @@ class TestEvent(ComponentRegistryCase):
         collected = collecter.collect_events("on_record_create")
         # CollectedEvents.events contains the collected events
         self.assertEqual(1, len(collected.events))
-        event = list(collected.events)[0]
+        event = next(iter(collected.events))
         self.assertEqual(work, event.__self__.work)
         self.assertEqual(env, event.__self__.work.env)
 
@@ -325,7 +326,7 @@ class TestEvent(ComponentRegistryCase):
         class MyOtherEventListener(Component):
             _name = "my.other.event.listener"
             _inherit = "base.event.listener"
-            _apply_on = ["res.country"]
+            _apply_on: ClassVar = ["res.country"]
 
             def on_record_create(self):
                 pass
@@ -407,7 +408,7 @@ class TestEventFromModel(TransactionComponentRegistryCase):
         class PartnerListener(Component):
             _name = "partner.event.listener"
             _inherit = "base.event.listener"
-            _apply_on = ["res.partner"]
+            _apply_on: ClassVar = ["res.partner"]
 
             def on_foo(self, record, name):
                 record.ref = name
@@ -415,7 +416,7 @@ class TestEventFromModel(TransactionComponentRegistryCase):
         class UserListener(Component):
             _name = "user.event.listener"
             _inherit = "base.event.listener"
-            _apply_on = ["res.users"]
+            _apply_on: ClassVar = ["res.users"]
 
             def on_foo(self, record, name):
                 raise AssertionError()

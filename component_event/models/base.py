@@ -115,5 +115,4 @@ class Base(models.AbstractModel):
     def unlink(self):
         for record in self:
             self._event("on_record_unlink").notify(record)
-        result = super().unlink()
-        return result
+        return super().unlink()
