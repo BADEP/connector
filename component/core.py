@@ -18,6 +18,7 @@ The most common classes used publicly are:
 
 import logging
 import operator
+import typing
 from collections import OrderedDict, defaultdict
 
 from odoo import models
@@ -488,7 +489,7 @@ class MetaComponent(type):
 
     """
 
-    _modules_components = defaultdict(list)
+    _modules_components: typing.ClassVar[defaultdict] = defaultdict(list)
 
     def __init__(cls, name, bases, attrs):
         if not cls._register:
@@ -518,7 +519,7 @@ class MetaComponent(type):
         if cls._apply_on is None:
             return None
         # always return a list, used for the lookup
-        elif isinstance(cls._apply_on, str):
+        if isinstance(cls._apply_on, str):
             return [cls._apply_on]
         return cls._apply_on
 

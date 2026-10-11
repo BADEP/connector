@@ -4,6 +4,7 @@
 # Tell pylint to not bother us for all our fake component classes
 # pylint: disable=consider-merging-classes-inherited
 
+import typing
 from unittest import mock
 
 from odoo.addons.component.core import AbstractComponent, Component
@@ -96,7 +97,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
 
         class Component4(Component):
             _name = "component4"
-            _inherit = ["component2", "component3"]
+            _inherit: typing.ClassVar[list[str]] = ["component2", "component3"]
 
         Component1._build_component(self.comp_registry)
         Component2._build_component(self.comp_registry)
@@ -206,7 +207,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
 
         class Component2(Component):
             _name = "component2"
-            _inherit = ["component1", "component3"]
+            _inherit: typing.ClassVar[list[str]] = ["component1", "component3"]
 
         Component1._build_component(self.comp_registry)
         msg = "Component.*inherits from non-existing component.*"
@@ -224,7 +225,7 @@ class TestBuildComponent(TransactionComponentRegistryCase):
 
         class Component2bis(Component):
             _name = "component2"
-            _inherit = ["component2", "component1"]
+            _inherit: typing.ClassVar[list[str]] = ["component2", "component1"]
 
         Component1._build_component(self.comp_registry)
         Component2._build_component(self.comp_registry)

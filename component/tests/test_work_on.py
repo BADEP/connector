@@ -1,6 +1,8 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
+from odoo.api import NewId
+
 from odoo.addons.component.core import ComponentRegistry, WorkContext
 
 from .common import TransactionComponentRegistryCase
@@ -24,7 +26,7 @@ class TestWorkOn(TransactionComponentRegistryCase):
 
     def test_collection_work_on(self):
         """Create a new instance and test attributes access"""
-        collection_record = self.env[self.collection._name].new()
+        collection_record = self.env[self.collection._name].browse((NewId(),))
         with collection_record.work_on("res.partner") as work:
             self.assertEqual(collection_record, work.collection)
             self.assertEqual("collection.base", work.collection._name)
@@ -37,7 +39,7 @@ class TestWorkOn(TransactionComponentRegistryCase):
         registry = ComponentRegistry()
         collection_record = self.collection.with_context(
             components_registry=registry
-        ).new()
+        ).browse((NewId(),))
         with collection_record.work_on("res.partner") as work:
             self.assertEqual(collection_record, work.collection)
             self.assertEqual("collection.base", work.collection._name)

@@ -1,7 +1,10 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
+import typing
 from contextlib import contextmanager
+
+from odoo.api import NewId
 
 from odoo.addons.component.core import Component
 from odoo.addons.component.exception import NoComponentError, SeveralComponentError
@@ -35,13 +38,13 @@ class TestComponent(TransactionComponentRegistryCase):
             _name = "component1"
             _collection = "collection.base"
             _usage = "for.test"
-            _apply_on = ["res.partner"]
+            _apply_on: typing.ClassVar[list[str]] = ["res.partner"]
 
         class Component2(Component):
             _name = "component2"
             _collection = "collection.base"
             _usage = "for.test"
-            _apply_on = ["res.users"]
+            _apply_on: typing.ClassVar[list[str]] = ["res.users"]
 
         # build the components and register them in our
         # test component registry
@@ -50,7 +53,7 @@ class TestComponent(TransactionComponentRegistryCase):
 
         # our collection, in a less abstract use case, it
         # could be a record of 'magento.backend' for instance
-        self.collection_record = self.env[self.collection._name].new()
+        self.collection_record = self.env[self.collection._name].browse((NewId(),))
 
         @contextmanager
         def get_base():
@@ -111,18 +114,22 @@ class TestComponent(TransactionComponentRegistryCase):
     def test_component_get_by_name_wrong_model(self):
         """Use component_by_name with a model not in _apply_on"""
         msg = "Component with name 'component2' can't be used for model 'res.partner'.*"
-        with self.get_base() as base:
-            with self.assertRaisesRegex(NoComponentError, msg):
-                # we ask for the model 'component2' but we are working
-                # with res.partner, and it only accepts res.users
-                base.component_by_name("component2")
+        with (
+            self.get_base() as base,
+            self.assertRaisesRegex(NoComponentError, msg),
+        ):
+            # we ask for the model 'component2' but we are working
+            # with res.partner, and it only accepts res.users
+            base.component_by_name("component2")
 
     def test_component_get_by_name_not_exist(self):
         """Use component_by_name on a component that do not exist"""
         msg = "No component with name 'foo' found."
-        with self.get_base() as base:
-            with self.assertRaisesRegex(NoComponentError, msg):
-                base.component_by_name("foo")
+        with (
+            self.get_base() as base,
+            self.assertRaisesRegex(NoComponentError, msg),
+        ):
+            base.component_by_name("foo")
 
     def test_component_by_usage_same_model(self):
         """Use component(usage=...) on the same model"""
@@ -192,7 +199,7 @@ class TestComponent(TransactionComponentRegistryCase):
             _name = "component3"
             _collection = "collection.base"
             _usage = "for.test"
-            _apply_on = ["res.partner"]
+            _apply_on: typing.ClassVar[list[str]] = ["res.partner"]
 
         Component3._build_component(self.comp_registry)
 
@@ -366,7 +373,7 @@ class TestComponent(TransactionComponentRegistryCase):
             _name = "foo"
             _collection = "collection.base"
             _usage = "speaker"
-            _apply_on = ["res.partner"]
+            _apply_on: typing.ClassVar[list[str]] = ["res.partner"]
 
             @classmethod
             def _component_match(cls, work, **kw):
@@ -376,7 +383,7 @@ class TestComponent(TransactionComponentRegistryCase):
             _name = "bar"
             _collection = "collection.base"
             _usage = "speaker"
-            _apply_on = ["res.partner"]
+            _apply_on: typing.ClassVar[list[str]] = ["res.partner"]
 
         self._build_components(Foo, Bar)
 
