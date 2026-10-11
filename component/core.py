@@ -475,7 +475,7 @@ class WorkContext:
         return [comp(work_context) for comp in component_classes]
 
     def __str__(self):
-        return f"WorkContext({self.model_name}, {repr(self.collection)})"
+        return f"WorkContext({self.model_name}, {self.collection!r})"
 
     __repr__ = __str__
 

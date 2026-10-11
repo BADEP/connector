@@ -176,13 +176,12 @@ class TestComponent(TransactionComponentRegistryCase):
         Component3._build_component(self.comp_registry)
         Component1._build_component(self.comp_registry)
 
-        with self.get_base() as base:
-            with self.assertRaises(SeveralComponentError):
-                # When a component has no _apply_on, it means it can be applied
-                # on *any* model. Here, the candidates components would be:
-                # component3 (because it has no _apply_on so apply in any case)
-                # component4 (for the same reason)
-                base.component(usage="for.test")
+        with self.get_base() as base, self.assertRaises(SeveralComponentError):
+            # When a component has no _apply_on, it means it can be applied
+            # on *any* model. Here, the candidates components would be:
+            # component3 (because it has no _apply_on so apply in any case)
+            # component4 (for the same reason)
+            base.component(usage="for.test")
 
     def test_component_error_several_same_model(self):
         """Use component(usage=...) when more than one component match a model"""
@@ -197,12 +196,11 @@ class TestComponent(TransactionComponentRegistryCase):
 
         Component3._build_component(self.comp_registry)
 
-        with self.get_base() as base:
-            with self.assertRaises(SeveralComponentError):
-                # Here, the candidates components would be:
-                # component1 (because we are working with res.partner),
-                # component3 (for the same reason)
-                base.component(usage="for.test")
+        with self.get_base() as base, self.assertRaises(SeveralComponentError):
+            # Here, the candidates components would be:
+            # component1 (because we are working with res.partner),
+            # component3 (for the same reason)
+            base.component(usage="for.test")
 
     def test_component_specific_model(self):
         """Use component(usage=...) when more than one component match but
@@ -338,9 +336,8 @@ class TestComponent(TransactionComponentRegistryCase):
 
     def test_no_component(self):
         """No component found for asked usage"""
-        with self.get_base() as base:
-            with self.assertRaises(NoComponentError):
-                base.component(usage="foo")
+        with self.get_base() as base, self.assertRaises(NoComponentError):
+            base.component(usage="foo")
 
     def test_no_many_component(self):
         """No component found for asked usage for many_components()"""
