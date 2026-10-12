@@ -74,5 +74,4 @@ def pg_try_advisory_lock(env, lock):
     int_lock = struct.unpack("q", hasher.digest()[:8])
 
     env.cr.execute("SELECT pg_try_advisory_xact_lock(%s);", (int_lock,))
-    acquired = env.cr.fetchone()[0]
-    return acquired
+    return env.cr.fetchone()[0]

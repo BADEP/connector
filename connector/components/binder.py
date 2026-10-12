@@ -62,8 +62,7 @@ class Binder(AbstractComponent):
         bindings.ensure_one()
         if unwrap:
             bindings = bindings[self._odoo_field]
-        bindings = bindings.with_context(**context)
-        return bindings
+        return bindings.with_context(**context)
 
     def to_external(self, binding, wrap=False):
         """Give the external ID for an Odoo binding ID

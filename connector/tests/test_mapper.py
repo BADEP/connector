@@ -563,10 +563,7 @@ class TestMapper(TransactionComponentRegistryCase):
 
             @mapping
             def any(self, record):
-                if self.options.custom:
-                    res = True
-                else:
-                    res = False
+                res = bool(self.options.custom)
                 return {"res": res}
 
         self._build_components(MyMapper)
@@ -587,10 +584,7 @@ class TestMapper(TransactionComponentRegistryCase):
 
             @mapping
             def any(self, record):
-                if self.options.custom is None:
-                    res = True
-                else:
-                    res = False
+                res = self.options.custom is None
                 return {"res": res}
 
         self._build_components(MyMapper)
@@ -898,6 +892,7 @@ class TestMapperBinding(TransactionComponentRegistryCase):
                 rate = record.get("rate")
                 if rate and rate < 40:
                     return {"rate": record["rate"] * 2}
+                return None
 
         class SaleLineImportMapChild(Component):
             _name = "sale.line.mapper"

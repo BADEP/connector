@@ -176,7 +176,7 @@ class GenericExporter(AbstractComponent):
             fields = None  # should be created with all the fields
 
         if self._has_to_skip():
-            return
+            return None
 
         # export the missing linked resources
         self._export_dependencies()

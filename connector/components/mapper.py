@@ -126,10 +126,7 @@ def none(field):
     """
 
     def modifier(self, record, to_attr):
-        if callable(field):
-            result = field(self, record, to_attr)
-        else:
-            result = record[field]
+        result = field(self, record, to_attr) if callable(field) else record[field]
         if not result:
             return None
         return result
@@ -187,10 +184,7 @@ def m2o_to_external(field, binding=None):
                 f"The column {field} should be a Many2one, got {type(column)}"
             )
         rel_id = record[field].id
-        if binding is None:
-            binding_model = column.comodel_name
-        else:
-            binding_model = binding
+        binding_model = column.comodel_name if binding is None else binding
         binder = self.binder_for(binding_model)
         # if a relation is not a binding, we wrap the record in the
         # binding, we'll return the id of the binding
@@ -237,10 +231,7 @@ def external_to_m2o(field, binding=None):
                 f"The column {to_attr} should be a Many2one, got {type(column)}"
             )
         rel_id = record[field]
-        if binding is None:
-            binding_model = column.comodel_name
-        else:
-            binding_model = binding
+        binding_model = column.comodel_name if binding is None else binding
         binder = self.binder_for(binding_model)
         # if we want the normal record, not a binding,
         # we ask to the binder to unwrap the binding
@@ -255,12 +246,11 @@ def external_to_m2o(field, binding=None):
             )
         if isinstance(record, models.BaseModel):
             return record.id
-        else:
-            _logger.debug(
-                "Binder for %s returned an id, returning a record should be preferred.",
-                binding_model,
-            )
-            return record
+        _logger.debug(
+            "Binder for %s returned an id, returning a record should be preferred.",
+            binding_model,
+        )
+        return record
 
     return modifier
 
@@ -691,10 +681,9 @@ class Mapper(AbstractComponent):
         assert self._map_child_usage is not None, "_map_child_usage required"
         child_records = map_record.source[from_attr]
         mapper_child = self._get_map_child_component(model_name)
-        items = mapper_child.get_items(
+        return mapper_child.get_items(
             child_records, map_record, to_attr, options=self.options
         )
-        return items
 
     @contextmanager
     def _mapping_options(self, options):
@@ -727,7 +716,7 @@ class Mapper(AbstractComponent):
                 fieldname = self._direct_source_field_name(from_attr)
                 changed_by.add(fieldname)
 
-        for _method_name, method_def in self._map_methods.items():
+        for method_def in self._map_methods.values():
             changed_by |= method_def.changed_by
         return changed_by
 
