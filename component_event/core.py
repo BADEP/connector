@@ -155,4 +155,4 @@ class EventWorkContext(WorkContext):
 
     def __str__(self):
         return f"""EventWorkContext(
-                {repr(self._env or self._collection)},{self.model_name})"""
+                {self._env or self._collection!r},{self.model_name})"""
