@@ -488,7 +488,7 @@ class MetaComponent(type):
 
     """
 
-    _modules_components = defaultdict(list)
+    _modules_components = defaultdict(list)  # noqa: RUF012
 
     def __init__(cls, name, bases, attrs):
         if not cls._register:
@@ -518,7 +518,7 @@ class MetaComponent(type):
         if cls._apply_on is None:
             return None
         # always return a list, used for the lookup
-        elif isinstance(cls._apply_on, str):
+        if isinstance(cls._apply_on, str):
             return [cls._apply_on]
         return cls._apply_on
 
