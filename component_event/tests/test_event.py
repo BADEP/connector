@@ -1,7 +1,6 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-from typing import ClassVar
 from unittest import mock
 
 from odoo.tests.common import BaseCase, tagged
@@ -326,7 +325,7 @@ class TestEvent(ComponentRegistryCase):
         class MyOtherEventListener(Component):
             _name = "my.other.event.listener"
             _inherit = "base.event.listener"
-            _apply_on: ClassVar = ["res.country"]
+            _apply_on = ["res.country"]  # noqa: RUF012
 
             def on_record_create(self):
                 pass
@@ -408,7 +407,7 @@ class TestEventFromModel(TransactionComponentRegistryCase):
         class PartnerListener(Component):
             _name = "partner.event.listener"
             _inherit = "base.event.listener"
-            _apply_on: ClassVar = ["res.partner"]
+            _apply_on = ["res.partner"]  # noqa: RUF012
 
             def on_foo(self, record, name):
                 record.ref = name
@@ -416,7 +415,7 @@ class TestEventFromModel(TransactionComponentRegistryCase):
         class UserListener(Component):
             _name = "user.event.listener"
             _inherit = "base.event.listener"
-            _apply_on: ClassVar = ["res.users"]
+            _apply_on = ["res.users"]  # noqa: RUF012
 
             def on_foo(self, record, name):
                 raise AssertionError()
