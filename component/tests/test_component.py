@@ -1,7 +1,6 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-import typing
 from contextlib import contextmanager
 
 from odoo.api import NewId
@@ -38,13 +37,13 @@ class TestComponent(TransactionComponentRegistryCase):
             _name = "component1"
             _collection = "collection.base"
             _usage = "for.test"
-            _apply_on: typing.ClassVar[list[str]] = ["res.partner"]
+            _apply_on = ["res.partner"]  # noqa: RUF012
 
         class Component2(Component):
             _name = "component2"
             _collection = "collection.base"
             _usage = "for.test"
-            _apply_on: typing.ClassVar[list[str]] = ["res.users"]
+            _apply_on = ["res.users"]  # noqa: RUF012
 
         # build the components and register them in our
         # test component registry
@@ -199,7 +198,7 @@ class TestComponent(TransactionComponentRegistryCase):
             _name = "component3"
             _collection = "collection.base"
             _usage = "for.test"
-            _apply_on: typing.ClassVar[list[str]] = ["res.partner"]
+            _apply_on = ["res.partner"]  # noqa: RUF012
 
         Component3._build_component(self.comp_registry)
 
@@ -373,7 +372,7 @@ class TestComponent(TransactionComponentRegistryCase):
             _name = "foo"
             _collection = "collection.base"
             _usage = "speaker"
-            _apply_on: typing.ClassVar[list[str]] = ["res.partner"]
+            _apply_on = ["res.partner"]  # noqa: RUF012
 
             @classmethod
             def _component_match(cls, work, **kw):
@@ -383,7 +382,7 @@ class TestComponent(TransactionComponentRegistryCase):
             _name = "bar"
             _collection = "collection.base"
             _usage = "speaker"
-            _apply_on: typing.ClassVar[list[str]] = ["res.partner"]
+            _apply_on = ["res.partner"]  # noqa: RUF012
 
         self._build_components(Foo, Bar)
 

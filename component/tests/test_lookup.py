@@ -1,8 +1,6 @@
 # Copyright 2017 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
 
-import typing
-
 from odoo.addons.component.core import AbstractComponent, Component
 
 from .common import TransactionComponentRegistryCase
@@ -129,7 +127,7 @@ class TestLookup(TransactionComponentRegistryCase):
             _collection = "foobar"
             _usage = "speaker"
             # support list
-            _apply_on: typing.ClassVar[list[str]] = ["res.partner"]
+            _apply_on = ["res.partner"]  # noqa: RUF012
 
         class Bar(Component):
             _name = "bar"
